@@ -1,0 +1,16 @@
+- 20/10/2025 | Dzidan rafi -
+penambahan file 
+1. index.php
+2. login.php
+3. logout.php
+4. template/auth_check.php
+5. template/sidebar.php
+6. template/topbar.php
+7. koneksi/koneksi.php
+8. database/gearzone.sql
+
+penambahan fungsi
+1. login logout, dan mengambil sesi login
+
+akan mengambil penambahan
+1. Create, Read, Update, Delete barang
