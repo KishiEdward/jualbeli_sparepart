@@ -104,11 +104,6 @@ body {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
-.col-deskripsi {
-  max-width: 200px;          /* batas lebar kolom */
-  white-space: wrap;       /* biar teks 1 baris saja */
-}
-
 hr {
   margin: 1rem 0;
   color: inherit;
