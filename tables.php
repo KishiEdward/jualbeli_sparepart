@@ -1,3 +1,7 @@
+<?php
+    include 'koneksi/koneksi.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -113,43 +117,73 @@
                         <h1 class="mt-4">Tables</h1>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Tables</li>
+                            <li class="breadcrumb-item active">Tabel produk</li>
                         </ol>
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the
-                                <a target="_blank" href="https://datatables.net/">official DataTables documentation</a>
-                                .
-                            </div>
-                        </div>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                DataTable Example
+                                Data produk
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Office</th>
-                                            <th>Age</th>
-                                            <th>Start date</th>
-                                            <th>Salary</th>
+                                            <th>Gambar</th>
+                                            <th>Nama produk</th>
+                                            <th>Kategori</th>
+                                            <th class="col-deskripsi">Deskripsi</th>
+                                            <th>Harga</th>
+                                            <th>Stok</th>
+                                            <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Office</th>
-                                            <th>Age</th>
-                                            <th>Start date</th>
-                                            <th>Salary</th>
+                                            <th>Gambar</th>
+                                            <th>Nama produk</th>
+                                            <th>Kategori</th>
+                                            <th class="col-deskripsi">Deskripsi</th>
+                                            <th>Harga</th>
+                                            <th>Stok</th>
+                                            <th>Aksi</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
+                                        <?php
+                                            $query = "SELECT * FROM produk";
+                                            $result = mysqli_query($conn, $query);
+
+                                            if (mysqli_num_rows($result) > 0) {
+                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                    echo "<tr>";
+
+                                                    // Gambar
+                                                    if (!empty($row['gambar'])) {
+                                                        echo "<td><img src='img/" . htmlspecialchars($row['gambar']) . "' width='70' height='70' class='rounded'></td>";
+                                                    } else {
+                                                        echo "<td><span class='text-muted fst-italic'>Tidak ada gambar</span></td>";
+                                                    }
+                                                    // Nama produk
+                                                    echo "<td>" . htmlspecialchars($row['nama_produk']) . "</td>";
+                                                    // Kategori (sementara tampilkan ID kategori, nanti bisa digabung tabel kategori)
+                                                    echo "<td>" . htmlspecialchars($row['kategori_id']) . "</td>";
+                                                    // Deskripsi
+                                                    echo "<td>" . htmlspecialchars($row['deskripsi']) . "</td>";
+                                                    // Harga dalam format rupiah
+                                                    echo "<td>Rp " . number_format($row['harga'], 0, ',', '.') . "</td>";
+                                                    // Stok
+                                                    echo "<td>" . htmlspecialchars($row['stok']) . "</td>";
+                                                    // Tombol aksi
+                                                    echo "<td>
+                                                            <a href='edit_produk.php?id=" . $row['produk_id'] . "' class='btn btn-sm btn-warning'>Edit</a>
+                                                            <a href='hapus_produk.php?id=" . $row['produk_id'] . "' class='btn btn-sm btn-danger' onclick=\"return confirm('Yakin ingin hapus produk ini?')\">Hapus</a>
+                                                          </td>";
+                                                    echo "</tr>";
+                                                }
+                                            } else {
+                                                echo "<tr><td colspan='7' class='text-center text-muted'>Belum ada data produk</td></tr>";
+                                            }
+                                        ?>
                                     </tbody>
                                 </table>
                             </div>

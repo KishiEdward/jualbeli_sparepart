@@ -14,3 +14,4 @@ penambahan fungsi
 
 akan mengambil penambahan
 1. Create, Read, Update, Delete barang
+
