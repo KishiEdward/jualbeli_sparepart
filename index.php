@@ -1,4 +1,5 @@
 <?php
+    include_once 'koneksi/koneksi.php';
     include_once 'template/auth_check.php';
     
      // Menampilkan pesan selamat datang sekali setelah login
@@ -103,28 +104,59 @@
                                 Nama Barang
                             </div>
                             <div class="card-body">
-                                <table id="datatablesSimple">
+                                <table id="datatablesSimple" class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Office</th>
-                                            <th>Age</th>
-                                            <th>Start date</th>
-                                            <th>Salary</th>
+                                            <th>Gambar</th>
+                                            <th>Nama Produk</th>
+                                            <th>Kategori</th>
+                                            <th class="col-deskripsi">Deskripsi</th>
+                                            <th>Harga</th>
+                                            <th>Stok</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Office</th>
-                                            <th>Age</th>
-                                            <th>Start date</th>
-                                            <th>Salary</th>
+                                            <th>Gambar</th>
+                                            <th>Nama Produk</th>
+                                            <th>Kategori</th>
+                                            <th class="col-deskripsi">Deskripsi</th>
+                                            <th>Harga</th>
+                                            <th>Stok</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
+                                        <?php
+                                            $query = "SELECT * FROM produk";
+                                            $result = mysqli_query($conn, $query);
+
+                                            if (mysqli_num_rows($result) > 0) {
+                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                    echo "<tr>";
+
+                                                    // Gambar
+                                                    if (!empty($row['gambar'])) {
+                                                        echo "<td><img src='assets/img/" . htmlspecialchars($row['gambar']) . "' width='70' height='70' class='rounded'></td>";
+                                                    } else {
+                                                        echo "<td><span class='text-muted fst-italic'>Tidak ada gambar</span></td>";
+                                                    }
+                                                    // Nama produk
+                                                    echo "<td>" . htmlspecialchars($row['nama_produk']) . "</td>";
+                                                    // Kategori
+                                                    echo "<td>" . htmlspecialchars($row['kategori_id']) . "</td>";
+                                                    // Deskripsi (pakai title biar saat hover muncul teks lengkap)
+                                                    echo "<td class='col-deskripsi' title='" . htmlspecialchars($row['deskripsi']) . "'>" . htmlspecialchars($row['deskripsi']) . "</td>";
+                                                    // Harga
+                                                    echo "<td>Rp " . number_format($row['harga'], 0, ',', '.') . "</td>";
+                                                    // Stok
+                                                    echo "<td>" . htmlspecialchars($row['stok']) . "</td>";
+
+                                                    echo "</tr>";
+                                                }
+                                            } else {
+                                                echo "<tr><td colspan='7' class='text-center text-muted'>Belum ada data produk</td></tr>";
+                                            }
+                                        ?>
                                     </tbody>
                                 </table>
                             </div>
