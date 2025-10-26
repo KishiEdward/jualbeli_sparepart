@@ -127,30 +127,26 @@
                                     </tfoot>
                                     <tbody>
                                         <?php
-                                            $query = "SELECT * FROM produk";
+                                            $query = "SELECT produk.*, kategori.nama_kategori 
+                                                      FROM produk 
+                                                      JOIN kategori ON produk.kategori_id = kategori.kategori_id";
                                             $result = mysqli_query($conn, $query);
 
                                             if (mysqli_num_rows($result) > 0) {
                                                 while ($row = mysqli_fetch_assoc($result)) {
                                                     echo "<tr>";
 
-                                                    // Gambar
                                                     if (!empty($row['gambar'])) {
                                                         echo "<td><img src='assets/img/" . htmlspecialchars($row['gambar']) . "' width='70' height='70' class='rounded'></td>";
                                                     } else {
                                                         echo "<td><span class='text-muted fst-italic'>Tidak ada gambar</span></td>";
                                                     }
-                                                    // Nama produk
-                                                    echo "<td>" . htmlspecialchars($row['nama_produk']) . "</td>";
-                                                    // Kategori
-                                                    echo "<td>" . htmlspecialchars($row['kategori_id']) . "</td>";
-                                                    // Deskripsi (pakai title biar saat hover muncul teks lengkap)
-                                                    echo "<td class='col-deskripsi' title='" . htmlspecialchars($row['deskripsi']) . "'>" . htmlspecialchars($row['deskripsi']) . "</td>";
-                                                    // Harga
-                                                    echo "<td>Rp " . number_format($row['harga'], 0, ',', '.') . "</td>";
-                                                    // Stok
-                                                    echo "<td>" . htmlspecialchars($row['stok']) . "</td>";
 
+                                                    echo "<td>" . htmlspecialchars($row['nama_produk']) . "</td>";
+                                                    echo "<td>" . htmlspecialchars($row['nama_kategori']) . "</td>";
+                                                    echo "<td class='col-deskripsi' title='" . htmlspecialchars($row['deskripsi']) . "'>" . htmlspecialchars($row['deskripsi']) . "</td>";
+                                                    echo "<td>Rp " . number_format($row['harga'], 0, ',', '.') . "</td>";
+                                                    echo "<td>" . htmlspecialchars($row['stok']) . "</td>";
                                                     echo "</tr>";
                                                 }
                                             } else {
