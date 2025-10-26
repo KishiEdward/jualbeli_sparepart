@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Oct 20, 2025 at 02:11 PM
+-- Generation Time: Oct 26, 2025 at 02:32 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -61,6 +61,22 @@ CREATE TABLE `kategori` (
   `nama_kategori` varchar(150) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `kategori`
+--
+
+INSERT INTO `kategori` (`kategori_id`, `nama_kategori`) VALUES
+(4, 'Aki'),
+(8, 'Ban'),
+(1, 'busi'),
+(5, 'Filter Udara'),
+(3, 'Kampas Rem'),
+(10, 'Knalpot'),
+(7, 'Lampu'),
+(2, 'Oli Mesin'),
+(6, 'Rantai & Gear'),
+(9, 'Spion');
+
 -- --------------------------------------------------------
 
 --
@@ -91,6 +107,30 @@ CREATE TABLE `produk` (
   `stok` int NOT NULL DEFAULT '0',
   `gambar` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `produk`
+--
+
+INSERT INTO `produk` (`produk_id`, `kategori_id`, `nama_produk`, `deskripsi`, `harga`, `stok`, `gambar`) VALUES
+(1, 1, 'NGK Iridium busi', 'busi iridium tahan lama 20k km', '50000.00', 200, 'joker.jpg'),
+(3, 2, 'Shell Advance AX7', 'Oli mesin semi-sintetik untuk motor 4T.', '65000.00', 180, NULL),
+(4, 2, 'Motul 7100 10W40', 'Oli premium dengan perlindungan maksimal.', '120000.00', 100, NULL),
+(5, 3, 'Daytona Kampas Rem', 'Kampas rem berkualitas tinggi untuk pengereman lembut.', '70000.00', 90, NULL),
+(6, 3, 'Aspira Disk Brake Pad', 'Kampas rem cakram standar OEM.', '55000.00', 120, NULL),
+(7, 4, 'GS Astra MF', 'Aki bebas perawatan untuk motor bebek dan matic.', '160000.00', 80, NULL),
+(8, 4, 'Yuasa YTX5L-BS', 'Aki kering dengan daya tahan tinggi.', '170000.00', 60, NULL),
+(9, 5, 'Ferrox Filter Udara', 'Filter udara stainless untuk performa maksimal.', '250000.00', 40, NULL),
+(10, 5, 'Sakura Air Filter', 'Filter udara pengganti OEM berkualitas.', '60000.00', 75, NULL),
+(11, 6, 'TK Racing Gear Set', 'Gear set racing untuk peningkatan akselerasi.', '180000.00', 70, NULL),
+(12, 6, 'SSS Rantai & Gear', 'Rantai kuat dan awet untuk pemakaian harian.', '210000.00', 90, NULL),
+(13, 7, 'Osram LED H4', 'Lampu LED putih terang untuk visibilitas malam.', '90000.00', 110, NULL),
+(14, 7, 'Philips X-treme Vision', 'Bohlam halogen dengan cahaya 130% lebih terang.', '85000.00', 100, NULL),
+(15, 8, 'IRC NR77 Ban Depan', 'Ban tubeless dengan daya cengkeram tinggi.', '220000.00', 60, NULL),
+(16, 8, 'FDR Blaze Ban Belakang', 'Ban sporty dengan grip kuat di berbagai kondisi.', '250000.00', 55, NULL),
+(17, 9, 'Spion Rizoma Hitam', 'Spion gaya racing berbahan aluminium.', '120000.00', 90, NULL),
+(18, 9, 'Spion Lipat Universal', 'Spion lipat praktis untuk motor harian.', '80000.00', 120, NULL),
+(19, 10, 'WRX Knalpot Racing', 'Knalpot stainless untuk suara garang dan ringan.', '450000.00', 40, NULL);
 
 -- --------------------------------------------------------
 
@@ -243,6 +283,22 @@ ALTER TABLE `ulasan`
 ALTER TABLE `users`
   ADD PRIMARY KEY (`user_id`),
   ADD UNIQUE KEY `email` (`email`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `kategori`
+--
+ALTER TABLE `kategori`
+  MODIFY `kategori_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `produk`
+--
+ALTER TABLE `produk`
+  MODIFY `produk_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
