@@ -20,6 +20,7 @@
                                     <a class="nav-link" href="/gearzone/barang/index.php">Produk</a>
                                     <a class="nav-link" href="/gearzone/kategori/index.php">Kategori</a>
                                     <a class="nav-link" href="/gearzone/users/index.php">User</a>
+                                    <a class="nav-link" href="/gearzone/pesanan/index.php">Pesanan</a>
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
