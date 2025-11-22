@@ -33,10 +33,6 @@ include_once '../template/auth_check.php';
                     <div class="card-body">
                         <form action="" method="post" enctype="multipart/form-data">
                             <div class="mb-3">
-                                <label class="form-label">Nama Produk</label>
-                                <input type="text" name="nama_produk" class="form-control" required>
-                            </div>
-                            <div class="mb-3">
                                 <label class="form-label">Kategori</label>
                                 <select name="kategori_id" class="form-select" required>
                                     <option value="">-- Pilih Kategori --</option>
@@ -47,6 +43,10 @@ include_once '../template/auth_check.php';
                                     }
                                     ?>
                                 </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Nama Produk</label>
+                                <input type="text" name="nama_produk" class="form-control" required>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Deskripsi</label>
