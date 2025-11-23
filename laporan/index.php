@@ -73,9 +73,9 @@ $tgl_selesai = isset($_GET['tgl_selesai']) ? $_GET['tgl_selesai'] : date('Y-m-d'
                                         <a href="index.php" class="btn btn-secondary w-100">Reset</a>
                                     </div>
                                     <div class="col-md-2">
-                                        <button onclick="window.print()" class="btn btn-success w-100 btn-print">
-                                            <i class="fas fa-print"></i> Cetak
-                                        </button>
+                                        <a href="cetak_laporan.php?tgl_mulai=<?= $tgl_mulai; ?>&tgl_selesai=<?= $tgl_selesai; ?>" target="_blank" class="btn btn-success w-100">
+                                            <i class="fas fa-print"></i> Cetak PDF
+                                        </a>
                                     </div>
                                 </div>
                             </form>
@@ -94,7 +94,7 @@ $tgl_selesai = isset($_GET['tgl_selesai']) ? $_GET['tgl_selesai'] : date('Y-m-d'
                             </div>
 
                             <table class="table table-bordered table-striped">
-                                <thead class="table-dark">
+                                <thead class="table-info">
                                     <tr>
                                         <th>No</th>
                                         <th>Tanggal</th>
