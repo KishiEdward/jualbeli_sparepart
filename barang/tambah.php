@@ -31,7 +31,7 @@ if (isset($_POST['simpan'])) {
                     icon: 'error'
                 });
             </script>";
-            exit; // Stop eksekusi
+            exit; 
         }
     }
 
@@ -49,11 +49,6 @@ if (isset($_POST['simpan'])) {
                 mysqli_query($conn, $query_relasi);
             }
         }
-
-        // SWEETALERT SUKSES (Echo Script di sini)
-        // Kita echo script setelah HTML dirender agar library SWAL terbaca, 
-        // tapi karena logic ini di atas, kita perlu trik sedikit atau pastikan SWAL ada di head.
-        // Cara paling aman: Simpan status di variabel, lalu cetak di bawah.
         $berhasil = true;
     } else {
         $error_msg = mysqli_error($conn);
@@ -72,7 +67,7 @@ if (isset($_POST['simpan'])) {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         .checkbox-group {
-            max-height: 200px;
+            max-height: 250px; /* Sedikit dipertinggi */
             overflow-y: auto;
             border: 1px solid #ced4da;
             padding: 10px;
@@ -117,14 +112,28 @@ if (isset($_POST['simpan'])) {
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="mb-2 fw-bold">Kompatibel untuk Motor (Boleh pilih banyak)</label>
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <label class="fw-bold">Kompatibel untuk Motor</label>
+                                        
+                                        <select id="filterMerek" class="form-select form-select-sm" style="width: auto;">
+                                            <option value="all">Semua Merek</option>
+                                            <?php
+                                            // Ambil daftar merek unik untuk dropdown filter
+                                            $merek_query = mysqli_query($conn, "SELECT DISTINCT merek FROM model_motor ORDER BY merek ASC");
+                                            while ($mrk = mysqli_fetch_assoc($merek_query)) {
+                                                echo "<option value='{$mrk['merek']}'>{$mrk['merek']}</option>";
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+
                                     <div class="checkbox-group bg-light">
-                                        <div class="row">
+                                        <div class="row" id="modelContainer">
                                             <?php
                                             $mod = mysqli_query($conn, "SELECT * FROM model_motor ORDER BY merek ASC, nama_model ASC");
                                             while ($m = mysqli_fetch_assoc($mod)) {
                                             ?>
-                                            <div class="col-md-4 mb-2">
+                                            <div class="col-md-4 mb-2 model-item" data-merek="<?= $m['merek']; ?>">
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" name="model_ids[]" value="<?= $m['model_id']; ?>" id="mod<?= $m['model_id']; ?>">
                                                     <label class="form-check-label" for="mod<?= $m['model_id']; ?>">
@@ -134,10 +143,12 @@ if (isset($_POST['simpan'])) {
                                             </div>
                                             <?php } ?>
                                         </div>
+                                        <div id="noResult" class="text-center text-muted mt-2" style="display: none;">
+                                            <em>Tidak ada model motor untuk merek ini.</em>
+                                        </div>
                                     </div>
                                     <small class="text-muted">*Jika universal, tidak perlu dicentang.</small>
                                 </div>
-
                                 <div class="mb-3">
                                     <label>Stok</label>
                                     <input type="number" name="stok" class="form-control" required>
@@ -162,6 +173,39 @@ if (isset($_POST['simpan'])) {
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../js/scripts.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterDropdown = document.getElementById('filterMerek');
+            const modelItems = document.querySelectorAll('.model-item');
+            const noResultMsg = document.getElementById('noResult');
+
+            filterDropdown.addEventListener('change', function() {
+                const selectedMerek = this.value;
+                let visibleCount = 0;
+
+                modelItems.forEach(item => {
+                    // Ambil merek dari data attribute
+                    const itemMerek = item.getAttribute('data-merek');
+
+                    if (selectedMerek === 'all' || itemMerek === selectedMerek) {
+                        item.style.display = 'block'; // Tampilkan
+                        visibleCount++;
+                    } else {
+                        item.style.display = 'none'; // Sembunyikan
+                    }
+                });
+
+                // Tampilkan pesan jika kosong
+                if (visibleCount === 0) {
+                    noResultMsg.style.display = 'block';
+                } else {
+                    noResultMsg.style.display = 'none';
+                }
+            });
+        });
+    </script>
+
     <?php if (isset($berhasil) && $berhasil === true) : ?>
         <script>
             Swal.fire({
