@@ -8,11 +8,13 @@ if (!isset($_GET['id'])) {
 }
 $id = $_GET['id'];
 
-// Ambil Data Header (Transaksi, User, Pengiriman)
-$query_header = "SELECT t.*, u.nama, u.no_hp, p.alamat_tujuan, p.jasa_kirim, p.no_resi 
+// Ambil Data Header (Transaksi, User, Pengiriman, Promo)
+// Note: Ditambahkan LEFT JOIN promo untuk mengambil nama_promo
+$query_header = "SELECT t.*, u.nama, u.no_hp, p.alamat_tujuan, p.jasa_kirim, p.no_resi, pr.nama_promo 
                  FROM transaksi t
                  JOIN users u ON t.user_id = u.user_id
                  LEFT JOIN pengiriman p ON t.transaksi_id = p.transaksi_id
+                 LEFT JOIN promo pr ON t.promo_id = pr.promo_id
                  WHERE t.transaksi_id = '$id'";
 $result_header = mysqli_query($conn, $query_header);
 $header = mysqli_fetch_assoc($result_header);
@@ -54,7 +56,7 @@ $items = mysqli_query($conn, $query_items);
         .header-logo {
             font-size: 24px;
             font-weight: bold;
-            color: #ee4d2d; /* Warna Orange Shopee biar mirip */
+            color: #ee4d2d;
             display: flex;
             align-items: center;
         }
@@ -63,7 +65,6 @@ $items = mysqli_query($conn, $query_items);
             font-weight: bold;
         }
         
-        /* Bagian Alamat (Kiri Kanan) */
         .address-section {
             display: flex;
             justify-content: space-between;
@@ -80,7 +81,6 @@ $items = mysqli_query($conn, $query_items);
             line-height: 1.4;
         }
 
-        /* Tabel Informasi Pesanan (Atas) */
         .meta-table {
             width: 100%;
             border-collapse: collapse;
@@ -97,7 +97,6 @@ $items = mysqli_query($conn, $query_items);
             text-transform: uppercase;
         }
 
-        /* Tabel Produk (Inti) */
         .product-table {
             width: 100%;
             border-collapse: collapse;
@@ -122,8 +121,8 @@ $items = mysqli_query($conn, $query_items);
 
         /* Bagian Total (Bawah Kanan) */
         .total-section {
-            width: 40%;
-            margin-left: auto; /* Geser ke kanan */
+            width: 45%; /* Diperlebar sedikit agar muat teks diskon */
+            margin-left: auto;
         }
         .total-row {
             display: flex;
@@ -136,8 +135,8 @@ $items = mysqli_query($conn, $query_items);
             font-size: 14px;
             font-weight: bold;
         }
+        .text-success { color: #198754; } /* Warna hijau untuk diskon */
 
-        /* Footer Footeran */
         .footer-note {
             margin-top: 30px;
             font-size: 10px;
@@ -147,7 +146,6 @@ $items = mysqli_query($conn, $query_items);
             text-align: center;
         }
 
-        /* Agar saat diprint tidak ada margin aneh */
         @media print {
             @page { margin: 0.5cm; }
             body { -webkit-print-color-adjust: exact; }
@@ -240,25 +238,42 @@ $items = mysqli_query($conn, $query_items);
         </tbody>
     </table>
 
+    <?php 
+        $potongan = $header['potongan'];
+        $total_bayar = $header['total_harga'];
+        
+        // Menghitung Ongkir (Reverse Engineering karena ada diskon)
+        // Rumus: Total Bayar = (Subtotal + Ongkir) - Diskon
+        // Maka : Ongkir = Total Bayar - Subtotal + Diskon
+        $ongkir = $total_bayar - $subtotal_produk + $potongan;
+        
+        // Cegah ongkir minus (jika ada kesalahan data)
+        if($ongkir < 0) $ongkir = 0;
+    ?>
+
     <div class="total-section">
         <div class="total-row">
             <span>Subtotal Produk</span>
             <span>Rp <?= number_format($subtotal_produk, 0, ',', '.') ?></span>
         </div>
         
-        <?php 
-            $ongkir = $header['total_harga'] - $subtotal_produk; 
-            if($ongkir > 0):
-        ?>
+        <?php if($ongkir > 0): ?>
         <div class="total-row">
             <span>Total Ongkos Kirim</span>
             <span>Rp <?= number_format($ongkir, 0, ',', '.') ?></span>
         </div>
         <?php endif; ?>
 
+        <?php if($potongan > 0): ?>
+        <div class="total-row text-success">
+            <span>Diskon (<?= htmlspecialchars($header['nama_promo'] ?? 'Promo') ?>)</span>
+            <span>- Rp <?= number_format($potongan, 0, ',', '.') ?></span>
+        </div>
+        <?php endif; ?>
+
         <div class="total-row total-final">
             <span>Total Pembayaran</span>
-            <span style="color: #ee4d2d;">Rp <?= number_format($header['total_harga'], 0, ',', '.') ?></span>
+            <span style="color: #ee4d2d;">Rp <?= number_format($total_bayar, 0, ',', '.') ?></span>
         </div>
     </div>
 
